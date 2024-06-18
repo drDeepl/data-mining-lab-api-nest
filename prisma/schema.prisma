@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model Group {
+  id           Int       @id @default(autoincrement()) 
+  name         String    @db.VarChar(16) @unique
+  users         User[]
+
+
+  @@map("groups")
+
+}
+
+model User {
+  id           Int       @id @default(autoincrement()) 
+  email        String    @db.VarChar(64) @unique
+  role         ROLE      @default(USER)
+  firstName    String    @map("first_name")
+  lastName     String    @map("last_name")
+  passwordHash String    @map("password_hash")
+  groupId      Int       @map("group_id")
+  group        Group     @relation(fields: [groupId], references: [id])
+  teams       UserTeam[]
+  
+  @@map("users")
+}
+
+
+model Team {
+  id           Int       @id @default(autoincrement()) 
+  name         String    @db.VarChar(64) 
+  createdAt    DateTime  @db.Timestamp() @default(now())        @map("created_at")
+  users        UserTeam[]
+  projects     Project[]
+  applicationsContests ApplicationContest[]
+  
+  @@map("teams")
+}
+
+
+model UserTeam {
+  id           Int       @id @default(autoincrement()) 
+  userId       Int                                              @map("user_id")
+  user         User      @relation(fields:[userId], references: [id])
+  teamId       Int       @map("team_id")
+  team         Team      @relation(fields:[teamId], references: [id])
+
+  @@map("users_teams")
+}
+
+model Project {
+  id           Int       @id @default(autoincrement()) 
+  name         String    @db.VarChar(128)
+  description  String    @db.Text
+  githubLink   String    @db.VarChar(128) @map("github_link")
+  createdAt    DateTime  @db.Timestamp() @default(now())        @map("created_at")
+  teamId       Int                                              @map("team_id")
+  team         Team      @relation(fields: [teamId], references: [id])
+  covers       CoverProject[]
+  
+  @@map("projects")
+}
+
+model CoverProject {
+  id           Int       @id @default(autoincrement()) 
+  projectId    Int                                               @map("project_id")
+  project      Project   @relation(fields: [projectId], references: [id])
+  filename     String    @db.VarChar(64) @unique
+  path         String    @db.VarChar(128)
+  
+  @@map("covers_projects")
+}
+
+
+
+model Contest{
+  id             Int       @id @default(autoincrement()) 
+  name           String    @db.VarChar(128)
+  createdAt    DateTime  @db.Timestamp() @default(now())        @map("created_at")
+  startApplication    DateTime  @db.Timestamp()         @map("start_application")
+  endApplication    DateTime  @db.Timestamp()        @map("end_application")
+  applicationsContests ApplicationContest[]
+  covers               CoverContest[]
+  @@map("contests")
+}
+
+model ApplicationContest {
+  id             Int       @id @default(autoincrement()) 
+  contestId      Int       @map("contest_id")
+  contest        Contest   @relation(fields:[contestId], references: [id])
+  teamId         Int                                                        @map("team_id")
+  team           Team      @relation(fields: [teamId], references: [id])      
+  githubLink     String    @db.VarChar(128)                                 @map("github_link")
+  googleDocsLink String    @db.VarChar(128)                                 @map("google_docs_link")
+  createdAt    DateTime  @db.Timestamp() @default(now())                    @map("created_at")
+  
+  @@map("applications_contests")
+}
+
+model CoverContest{
+  id             Int       @id @default(autoincrement()) 
+  contestId      Int                                                         @map("contest_id")
+  contest        Contest   @relation(fields: [contestId], references: [id])
+  filename     String    @db.VarChar(64) @unique
+  path         String    @db.VarChar(128)
+
+  @@map("covers_contest")
+}
+
+
+model ResearchPaper{
+  id             Int       @id @default(autoincrement()) 
+  name         String    @db.VarChar(128)
+  description  String    @db.Text
+  isFree       Boolean   @default(true)                                       @map("is_free")
+  createdAt    DateTime  @db.Timestamp() @default(now())                    @map("created_at")
+
+  @@map("research_papers")
+}
+
+enum ROLE {
+  USER
+  ADMIN
+}

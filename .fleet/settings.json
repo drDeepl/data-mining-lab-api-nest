@@ -1,0 +1,7 @@
+{
+    "editor.formatOnSave": true,
+    "editor.guides": [],
+    "toolchains": [],
+    "launchTerminalOnOpen": true,
+    "terminal.shellIntegration": true,
+}
