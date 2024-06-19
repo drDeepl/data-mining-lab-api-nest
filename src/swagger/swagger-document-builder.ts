@@ -11,7 +11,7 @@ class SwaggerDocumentBuilder {
 
   private buildConfig() {
     const docBuilder = new DocumentBuilder()
-      .setTitle('DataMinigLabApi')
+      .setTitle('DataMiningLabApi')
       .addServer(this.configService.get('APP_URL'))
       .setDescription(
         'RESTfull API для сайта лаборатории интеллектуального анализа данных',
