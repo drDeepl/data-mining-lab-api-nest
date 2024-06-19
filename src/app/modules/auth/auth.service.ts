@@ -1,4 +1,9 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaExceptionHandler } from 'src/app/helpers/PrismaExceptionHandler';
 import { userPrismaErrorMessage } from 'src/app/helpers/constants/prisma-messages-error';
@@ -9,6 +14,8 @@ import { TokenPayloadInterface } from './interfaces/token-payload.interface';
 import { UserRepository } from '../user/repository/user.repository';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
+import { UserNotFoundException } from 'src/app/exceptions/UserNotFoundException';
+import SignInDto from './dto/sign-in.dto';
 
 @Injectable()
 export class AuthService {
@@ -70,5 +77,25 @@ export class AuthService {
       this.logger.error(error);
       throw this.prismaExceptionHandler.handleError(error);
     }
+  }
+
+  async signIn(dto: SignInDto): Promise<TokensDto> {
+    const user: User = await this.userRepository.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (!user) {
+      throw new UserNotFoundException(
+        'Пользователь с такой электронной почтой не найден',
+      );
+    }
+    const passwordMatches = await bcrypt.compare(
+      dto.password,
+      user.passwordHash,
+    );
+    if (!passwordMatches) {
+      throw new ForbiddenException('неверный пароль');
+    }
+    return await this.getTokens(user.id);
   }
 }

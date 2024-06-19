@@ -15,6 +15,7 @@ import {
   default as SignUpDto,
 } from './dto/sign-up.dto';
 import TokensDto from './dto/tokens.dto';
+import SignInDto from './dto/sign-in.dto';
 @ApiTags('AuthController')
 @Controller('auth')
 export class AuthController {
@@ -33,11 +34,35 @@ export class AuthController {
     status: HttpStatus.FORBIDDEN,
     description: 'электронная почта уже существует',
   })
-  //   @UseGuards(EmailExistGuard)
   @Post('signup')
   async signUp(@Body() createUserDto: SignUpDto): Promise<TokensDto> {
     try {
       return await this.authService.signUp(createUserDto);
+    } catch (error) {
+      throw exceptionHandler(error, this.logger);
+    }
+  }
+
+  @ApiOperation({ summary: 'авторизация пользователя' })
+  @ApiBody({ type: SignInDto, description: 'создание пользователя' })
+  @ApiResponse({ status: HttpStatus.OK, type: TokensDto })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'появляется при ошибках валидации полей',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description:
+      'появляется при несовпадении введенного пароля с паролем пользователя',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'появляется, если электронная почта не была найдена',
+  })
+  @Post('signin')
+  async signIn(@Body() signInDto: SignUpDto): Promise<TokensDto> {
+    try {
+      return await this.authService.signIn(signInDto);
     } catch (error) {
       throw exceptionHandler(error, this.logger);
     }

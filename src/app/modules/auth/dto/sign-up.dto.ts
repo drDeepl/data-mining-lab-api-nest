@@ -1,15 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsInt, IsNotEmpty } from 'class-validator';
 
 class SignUpDto {
-  @ApiProperty({
-    description: 'пароль пользователя',
-    nullable: false,
-    required: true,
-  })
-  @IsNotEmpty({ message: 'пароль не может быть пустым' })
-  password: string;
-
   @ApiProperty({
     description: 'email пользователя',
     nullable: false,
@@ -17,6 +9,14 @@ class SignUpDto {
   })
   @IsEmail({}, { message: 'введенное значение не является электронной почтой' })
   email: string;
+
+  @ApiProperty({
+    description: 'пароль пользователя',
+    nullable: false,
+    required: true,
+  })
+  @IsNotEmpty({ message: 'пароль не может быть пустым' })
+  password: string;
 
   @ApiProperty({
     description: 'имя пользователя',
@@ -38,9 +38,18 @@ class SignUpDto {
   })
   groupId: number;
 
-  constructor(email: string, password: string) {
+  constructor(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    groupId: number,
+  ) {
     this.email = email;
     this.password = password;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.groupId = groupId;
   }
 }
 
