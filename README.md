@@ -1,6 +1,6 @@
 ## Схема базы данных
 
-![schema_db](./docs/diagrams/schema_db.jpg)
+![schema_db](./docs/diagrams/schema_db.png)
 
 ## Установка
 
