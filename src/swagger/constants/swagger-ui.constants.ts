@@ -2,10 +2,10 @@ import { SwaggerUIConstants } from './interfaces/swagger-ui-constants.interface'
 
 export const SWAGGER_UI_CONSTANTS: SwaggerUIConstants = {
   TOPBAR: {
-    BACKGROUND_COLOR: '#222222',
+    BACKGROUND_COLOR: '#252525',
   },
   AUTHORIZE: {
-    BACKGROUND_COLOR: '#222222',
+    BACKGROUND_COLOR: '#252525',
   },
   HTTP_METHODS: {
     GET: {

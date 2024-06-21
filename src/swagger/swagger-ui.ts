@@ -9,6 +9,7 @@ export class SwaggerUI {
 
   private customfavIcon: string = `${this.applicationUrl}/wwwroot/swagger/assets/${this.faviconFilename}`;
   private customCss: string = `
+  
   .topbar-wrapper { content:url('${this.applicationUrl}/wwwroot/swagger/assets/${this.topbarIconFilename}'); width: 5em; height:inherit; }
   .topbar-wrapper svg { visibility: hidden; }
   .swagger-ui .topbar { background-color: ${SWAGGER_UI_CONSTANTS.TOPBAR.BACKGROUND_COLOR}; }
