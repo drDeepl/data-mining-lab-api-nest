@@ -1,6 +1,6 @@
 ## Схема базы данных
 
-![schema_db](./docs/diagrams/data_mining_lab_schema_db.v2.png)
+![schema_db](./docs/diagrams/data_mining_lab_schema_db_v3.svg)
 
 ## Установка
 
