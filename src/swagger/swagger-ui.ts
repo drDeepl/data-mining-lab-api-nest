@@ -5,11 +5,11 @@ export class SwaggerUI {
 
   private customSiteTitle = 'лаборатория интеллектуального анализа данных';
   private faviconFilename = 'khpi-logo.png';
-  private topbarIconFilename = 'khpi-logo.png';
+  private topbarIconFilename = 'topbar-logo.jpg';
 
   private customfavIcon: string = `${this.applicationUrl}/wwwroot/swagger/assets/${this.faviconFilename}`;
   private customCss: string = `
-  .topbar-wrapper { content:url('${this.applicationUrl}/wwwroot/swagger/assets/${this.faviconFilename}'); width: 3em; height:3em; }
+  .topbar-wrapper { content:url('${this.applicationUrl}/wwwroot/swagger/assets/${this.topbarIconFilename}'); width: 5em; height:inherit; }
   .topbar-wrapper svg { visibility: hidden; }
   .swagger-ui .topbar { background-color: ${SWAGGER_UI_CONSTANTS.TOPBAR.BACKGROUND_COLOR}; }
   .swagger-ui .opblock.opblock-get { background-color: ${SWAGGER_UI_CONSTANTS.HTTP_METHODS.GET.BACKGROUND_COLOR}; border-color: ${SWAGGER_UI_CONSTANTS.HTTP_METHODS.GET.BORDER_COLOR}; }
