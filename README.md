@@ -1,6 +1,9 @@
+## Диаграмма вариантов использования
+![schema_db](./docs/diagrams/img/use_case_data_mining_lab_api.jpg)
+
 ## Схема базы данных
 
-![schema_db](./docs/diagrams/data_mining_lab_schema_db_v3.svg)
+![schema_db](./docs/diagrams/img/data_mining_lab_schema_db_v3.svg)
 
 ## Установка
 

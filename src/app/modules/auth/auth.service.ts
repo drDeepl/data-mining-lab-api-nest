@@ -4,18 +4,18 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import { User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { UserNotFoundException } from 'src/app/exceptions/UserNotFoundException';
 import { PrismaExceptionHandler } from 'src/app/helpers/PrismaExceptionHandler';
 import { userPrismaErrorMessage } from 'src/app/helpers/constants/prisma-messages-error';
+import { UserRepository } from '../user/repository/user.repository';
+import SignInDto from './dto/sign-in.dto';
 import SignUpDto from './dto/sign-up.dto';
 import TokensDto from './dto/tokens.dto';
-import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import { TokenPayloadInterface } from './interfaces/token-payload.interface';
-import { UserRepository } from '../user/repository/user.repository';
-import * as bcrypt from 'bcrypt';
-import { ConfigService } from '@nestjs/config';
-import { UserNotFoundException } from 'src/app/exceptions/UserNotFoundException';
-import SignInDto from './dto/sign-in.dto';
 
 @Injectable()
 export class AuthService {
@@ -33,10 +33,11 @@ export class AuthService {
     return bcrypt.hash(data, 10);
   }
 
-  async getTokens(userId: number): Promise<TokensDto> {
+  async getTokens(userId: number, role: string): Promise<TokensDto> {
     const accessToken: string = await this.jwtService.signAsync(
       {
         sub: userId,
+        role: role,
       },
       {
         secret: this.configService.get('JWT_SECRET'),
@@ -72,7 +73,7 @@ export class AuthService {
           groupId: dto.groupId,
         },
       });
-      return await this.getTokens(user.id);
+      return await this.getTokens(user.id, user.role);
     } catch (error) {
       this.logger.error(error);
       throw this.prismaExceptionHandler.handleError(error);
@@ -96,6 +97,6 @@ export class AuthService {
     if (!passwordMatches) {
       throw new ForbiddenException('неверный пароль');
     }
-    return await this.getTokens(user.id);
+    return await this.getTokens(user.id, user.role);
   }
 }

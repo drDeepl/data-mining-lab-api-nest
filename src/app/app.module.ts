@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AuthModule } from './modules/auth/auth.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
+import { ResearchPaperModule } from './modules/research-paper/research-paper.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -25,6 +26,7 @@ import { UserModule } from './modules/user/user.module';
     PrismaModule,
     AuthModule,
     UserModule,
+    ResearchPaperModule,
   ],
   controllers: [],
   providers: [],
