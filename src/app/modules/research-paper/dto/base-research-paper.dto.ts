@@ -23,4 +23,9 @@ export class BaseResearchPaperDto {
     message: 'длина описания статьи не может быть больше 255 символов',
   })
   description: string;
+
+  constructor(name: string, description: string) {
+    this.name = name;
+    this.description = description;
+  }
 }

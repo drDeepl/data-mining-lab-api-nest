@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ResearchPaperService } from './research-paper.service';
+import { ResearchPaperRepository } from './repository/research-paper.repository';
 import { ResearchPaperController } from './research-paper.controller';
+import { ResearchPaperService } from './research-paper.service';
 
 @Module({
-  providers: [ResearchPaperService],
-  controllers: [ResearchPaperController]
+  controllers: [ResearchPaperController],
+  providers: [ResearchPaperRepository, ResearchPaperService],
 })
 export class ResearchPaperModule {}

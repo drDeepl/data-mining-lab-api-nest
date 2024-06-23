@@ -1,6 +1,6 @@
 import {
+  Body,
   Controller,
-  HttpException,
   HttpStatus,
   Logger,
   Post,
@@ -8,11 +8,13 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ROLE } from '@prisma/client';
+import { createException } from 'src/app/helpers/create-exception.helper';
 import TokensDto from '../auth/dto/tokens.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { RoleGuard } from '../auth/guards/role.guard';
 import { Roles } from '../auth/role/roles';
 import { CreateResearchPaperDto } from './dto/create-research-paper.dto';
+import { CreatedResearchPaperDto } from './dto/created-research-paper.dto';
 import { ResearchPaperService } from './research-paper.service';
 
 @ApiTags('ResearchPaperController')
@@ -43,7 +45,15 @@ export class ResearchPaperController {
   @Roles(ROLE.ADMIN, ROLE.USER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Post('')
-  async addResearchPaper() {
-    throw new HttpException('NOT IMPLEMENTED RESPONSE', HttpStatus.BAD_GATEWAY);
+  async addResearchPaper(
+    @Body() createResearchPaperDto: CreateResearchPaperDto,
+  ): Promise<CreatedResearchPaperDto> {
+    try {
+      return this.researchPaperSerice.createResearchPaper(
+        createResearchPaperDto,
+      );
+    } catch (error) {
+      createException(error, this.logger);
+    }
   }
 }
