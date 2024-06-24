@@ -7,6 +7,10 @@ export const userPrismaErrorMessage: {
     statusCode: HttpStatus.FORBIDDEN,
     description: 'Пользователь с таким публичным именем уже существует',
   },
+  P2003: {
+    statusCode: HttpStatus.NOT_FOUND,
+    description: 'выбранной группы не существует',
+  },
   P2025: {
     statusCode: HttpStatus.NOT_FOUND,
     description: 'пользователь не существует',

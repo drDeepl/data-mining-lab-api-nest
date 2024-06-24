@@ -26,7 +26,6 @@ import { UserModule } from './modules/user/user.module';
     PrismaModule,
     AuthModule,
     UserModule,
-    ResearchPaperModule,
   ],
   controllers: [],
   providers: [],
