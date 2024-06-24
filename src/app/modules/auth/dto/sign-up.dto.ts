@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsInt, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsInt, IsNotEmpty, IsString } from 'class-validator';
 
-class SignUpDto {
+export class SignUpDto {
   @ApiProperty({
     description: 'email пользователя',
     nullable: false,
@@ -23,12 +23,15 @@ class SignUpDto {
     nullable: false,
     required: true,
   })
+  @IsNotEmpty({ message: 'имя не может быть пустым' })
   firstName: string;
+
   @ApiProperty({
     description: 'фамилия пользователя',
     nullable: false,
     required: true,
   })
+  @IsNotEmpty({ message: 'фамилия не может быть пустой' })
   lastName: string;
 
   @ApiProperty({
@@ -36,21 +39,19 @@ class SignUpDto {
     nullable: true,
     required: false,
   })
-  groupId: number;
+  groupId: number | null;
 
   constructor(
     email: string,
     password: string,
     firstName: string,
     lastName: string,
-    groupId: number,
+    groupId: number | null,
   ) {
     this.email = email;
     this.password = password;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.groupId = groupId;
+    this.groupId = groupId ? groupId : null;
   }
 }
-
-export default SignUpDto;

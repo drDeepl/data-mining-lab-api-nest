@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
-class SignInDto {
+export class SignInDto {
   @ApiProperty({
     description: 'email пользователя',
     nullable: false,
@@ -22,5 +22,3 @@ class SignInDto {
     this.password = password;
   }
 }
-
-export default SignInDto;

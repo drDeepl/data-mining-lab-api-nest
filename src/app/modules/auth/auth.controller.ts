@@ -1,21 +1,13 @@
-import {
-  Body,
-  Controller,
-  HttpStatus,
-  Logger,
-  Post
-} from '@nestjs/common';
+import { Body, Controller, HttpStatus, Logger, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 // import { EmailExistGuard } from '../../guards/email-exists.guards';
-import { exceptionHandler } from '../../helpers/exception-handler.helpers';
-import { AuthService } from './auth.service';
-import SignInDto from './dto/sign-in.dto';
-import {
-  default as CreateUserDto,
-  default as SignUpDto,
-} from './dto/sign-up.dto';
-import TokensDto from './dto/tokens.dto';
 
+import { AuthService } from './auth.service';
+
+import TokensDto from './dto/tokens.dto';
+import { createException } from 'src/app/helpers/create-exception.helper';
+import { SignUpDto } from './dto/sign-up.dto';
+import { SignInDto } from './dto/sign-in.dto';
 
 @ApiTags('AuthController')
 @Controller('auth')
@@ -26,7 +18,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'регистрация пользователя' })
   @ApiResponse({ status: HttpStatus.OK, type: TokensDto })
-  @ApiBody({ type: CreateUserDto, description: '' })
+  @ApiBody({ type: SignUpDto, description: '' })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'ошибка валидации полей',
@@ -40,7 +32,7 @@ export class AuthController {
     try {
       return await this.authService.signUp(createUserDto);
     } catch (error) {
-      throw exceptionHandler(error, this.logger);
+      throw createException(error, this.logger);
     }
   }
 
@@ -61,11 +53,11 @@ export class AuthController {
     description: 'появляется, если электронная почта не была найдена',
   })
   @Post('signin')
-  async signIn(@Body() signInDto: SignUpDto): Promise<TokensDto> {
+  async signIn(@Body() signInDto: SignInDto): Promise<TokensDto> {
     try {
       return await this.authService.signIn(signInDto);
     } catch (error) {
-      throw exceptionHandler(error, this.logger);
+      throw createException(error, this.logger);
     }
   }
 }

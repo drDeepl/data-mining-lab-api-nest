@@ -12,10 +12,11 @@ import { UserNotFoundException } from 'src/app/exceptions/UserNotFoundException'
 import { PrismaExceptionHandler } from 'src/app/helpers/PrismaExceptionHandler';
 import { userPrismaErrorMessage } from 'src/app/helpers/constants/prisma-messages-error';
 import { UserRepository } from '../user/repository/user.repository';
-import SignInDto from './dto/sign-in.dto';
-import SignUpDto from './dto/sign-up.dto';
+
 import TokensDto from './dto/tokens.dto';
 import { TokenPayloadInterface } from './interfaces/token-payload.interface';
+import { SignUpDto } from './dto/sign-up.dto';
+import { SignInDto } from './dto/sign-in.dto';
 
 @Injectable()
 export class AuthService {
@@ -62,6 +63,7 @@ export class AuthService {
 
   async signUp(dto: SignUpDto): Promise<TokensDto> {
     try {
+      console.log(dto);
       const passwordHash = await this.hashData(dto.password);
 
       const user: User = await this.userRepository.create({
@@ -84,7 +86,7 @@ export class AuthService {
     const user: User = await this.userRepository.findUnique({
       where: { email: dto.email },
     });
-
+    console.log(user);
     if (!user) {
       throw new UserNotFoundException(
         'Пользователь с такой электронной почтой не найден',
