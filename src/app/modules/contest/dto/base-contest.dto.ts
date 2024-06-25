@@ -7,7 +7,7 @@ export class BaseContestDto {
     required: true,
     nullable: false,
   })
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'название не может быть пустым' })
   @MaxLength(128, {
     message: 'название не может быть больше 128 символов',
   })
@@ -18,7 +18,6 @@ export class BaseContestDto {
     required: true,
     nullable: false,
   })
-  @IsNotEmpty()
   @IsDateString(
     {},
     { message: 'строка должна быть в виде даты в формате ISO8601' },
@@ -30,7 +29,6 @@ export class BaseContestDto {
     required: true,
     nullable: false,
   })
-  @IsNotEmpty()
   @IsDateString(
     {},
     { message: 'строка должна быть в виде даты в формате ISO8601' },

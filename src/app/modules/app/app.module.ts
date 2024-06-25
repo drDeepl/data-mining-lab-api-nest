@@ -8,6 +8,7 @@ import { ResearchPaperModule } from '../research-paper/research-paper.module';
 import { UserModule } from '../user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ContestModule } from '../contest/contest.module';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { AppService } from './app.service';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => [
         {
-          rootPath: join(__dirname, '../..', 'wwwroot'),
+          rootPath: join(__dirname, '../../../..', 'wwwroot'),
           serveRoot: `/${configService.get<string>('SWAGGER_URL')}/wwwroot`,
         },
       ],
@@ -29,6 +30,7 @@ import { AppService } from './app.service';
     AuthModule,
     UserModule,
     ResearchPaperModule,
+    ContestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

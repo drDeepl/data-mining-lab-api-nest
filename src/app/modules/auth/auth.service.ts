@@ -10,13 +10,14 @@ import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { UserNotFoundException } from 'src/app/exceptions/UserNotFoundException';
 import { PrismaExceptionHandler } from 'src/app/helpers/PrismaExceptionHandler';
-import { userPrismaErrorMessage } from 'src/app/helpers/constants/prisma-messages-error';
+
 import { UserRepository } from '../user/repository/user.repository';
 
 import TokensDto from './dto/tokens.dto';
 import { TokenPayloadInterface } from './interfaces/token-payload.interface';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
+import { userPrismaErrorMessage } from 'src/app/constants/messages/error-prisma-exception-description';
 
 @Injectable()
 export class AuthService {
