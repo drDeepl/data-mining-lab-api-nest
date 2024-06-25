@@ -9,6 +9,7 @@ import { UserModule } from '../user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ContestModule } from '../contest/contest.module';
+import { TeamModule } from '../team/team.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ContestModule } from '../contest/contest.module';
     UserModule,
     ResearchPaperModule,
     ContestModule,
+    TeamModule,
   ],
   controllers: [AppController],
   providers: [AppService],

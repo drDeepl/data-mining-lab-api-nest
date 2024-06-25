@@ -8,6 +8,7 @@ export class UserDto extends BaseUserDto {
     nullable: false,
   })
   id: number;
+
   @ApiProperty({
     description: 'группа пользователя(если он является студентом)',
     required: true,

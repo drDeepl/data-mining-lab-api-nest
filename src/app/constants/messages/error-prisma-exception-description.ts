@@ -42,3 +42,16 @@ export const contestPrismaErrorMessage: {
     description: 'Запрашиваемого конкурса не существует',
   },
 };
+
+export const teamPrismaErrorMessage: {
+  [key: string]: { statusCode: number; description: string };
+} = {
+  P2002: {
+    statusCode: HttpStatus.FORBIDDEN,
+    description: 'Команда с таким названием уже существует',
+  },
+  P2025: {
+    statusCode: HttpStatus.NOT_FOUND,
+    description: 'Запрашиваемого конкурса не существует',
+  },
+};
