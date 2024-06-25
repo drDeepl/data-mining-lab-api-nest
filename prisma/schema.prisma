@@ -91,8 +91,8 @@ model Contest{
   id             Int       @id @default(autoincrement()) 
   name           String    @db.VarChar(128)
   createdAt    DateTime  @db.Timestamp() @default(now())        @map("created_at")
-  startApplication    DateTime  @db.Timestamp()         @map("start_application")
-  endApplication    DateTime  @db.Timestamp()        @map("end_application")
+  startContest    DateTime  @db.Timestamp()         @map("start_contest")
+  endContest    DateTime  @db.Timestamp()        @map("end_contest")
   applicationsContests ApplicationContest[]
   covers               CoverContest[]
   @@map("contests")

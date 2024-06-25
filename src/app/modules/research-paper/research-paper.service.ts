@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ResearchPaper } from '@prisma/client';
 import { PrismaExceptionHandler } from 'src/app/helpers/PrismaExceptionHandler';
-import { researchPaperPrismaErrorMessage } from 'src/app/utils/constants/error-prisma-exception-description';
+import { researchPaperPrismaErrorMessage } from 'src/app/constants/messages/error-prisma-exception-description';
 import { CreateResearchPaperDto } from './dto/create-research-paper.dto';
 import { ResearchPaperRepository } from './repository/research-paper.repository';
 import { ResearchPaperDto } from './dto/research-paper.dto';

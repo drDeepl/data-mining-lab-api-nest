@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { UserRepository } from './repository/user.repository';
-import { User } from '@prisma/client';
 import { UserNotFoundException } from 'src/app/exceptions/UserNotFoundException';
 import { PrismaExceptionHandler } from 'src/app/helpers/PrismaExceptionHandler';
-import { userPrismaErrorMessage } from 'src/app/helpers/constants/prisma-messages-error';
+
 import { UserDto } from './dto/user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { userPrismaErrorMessage } from 'src/app/constants/messages/error-prisma-exception-description';
 
 @Injectable()
 export class UserService {
