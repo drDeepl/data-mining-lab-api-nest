@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
-Injectable();
+@Injectable()
 export class ResearchPaperRepository {
   constructor(private readonly prisma: PrismaService) {}
 
@@ -11,5 +11,4 @@ export class ResearchPaperRepository {
   create = this.prisma.researchPaper.create;
   update = this.prisma.researchPaper.update;
   delete = this.prisma.researchPaper.delete;
-  
 }

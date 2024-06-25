@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseResearchPaperDto } from './base-research-paper.dto';
 
-export class CreateResearchPaperDto extends BaseResearchPaperDto {
+export class UpdateResearchPaperDto extends BaseResearchPaperDto {
   @ApiProperty({
-    description: 'статус научной статьи(занята или нет)',
+    description: 'статус научной статьи(true - свободна false - нет)',
     nullable: false,
     required: true,
   })
