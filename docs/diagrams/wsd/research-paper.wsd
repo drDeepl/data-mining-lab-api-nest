@@ -1,0 +1,76 @@
+@startuml research_paper
+
+skinparam ArrowColor #252525
+skinparam ClassBackgroundColor #F0F1F5
+skinparam ClassBorderColor #252525
+skinparam ClassFontColor #252525
+
+
+class ResearchPaperRepository {
+  - prisma: PrismaService
+  + findFirst()
+  + findUnique()
+  + findMany()
+  + create()
+  + update()
+  + delete()
+}
+
+class ResearchPaperService {
+  - prismaExceptionHandler: PrismaExceptionHandler
+  - researchPaperRepository: ResearchPaperRepository
+  + createResearchPaper(dto: CreateResearchPaperDto): Promise<ResearchPaperDto>
+  + updateResearchPaper(id: number, dto: UpdateResearchPaperDto): Promise<ResearchPaperDto>
+  + deleteResearchPaperById(id: number): Promise<void>
+  + findResearchPapers(): Promise<ResearchPaperDto[]>
+}
+
+class CreateResearchPaperDto {
+  + name: string
+  + description: string
+}
+
+class UpdateResearchPaperDto {
+  + name: string
+  + description: string
+}
+
+class ResearchPaperDto {
+  + id: number
+  + name: string
+  + description: string
+  + isFree: boolean
+  + createdAt: Date
+}
+
+class ResearchPaper {
+  + id: number
+  + name: string
+  + description: string
+  + isFree: boolean
+  + createdAt: Date
+}
+
+class ResearchPaperController {
+
+    -researchPaperService: ResearchPaperService
+    +addResearchPaper(createResearchPaperDto: CreateResearchPaperDto): Promise<ResearchPaperDto>
+    +editResearchPaperById(researchPaperId: number, updateResearchPaperDto: UpdateResearchPaperDto): Promise<ResearchPaperDto>
+    +deleteResearchPaper(researchPaperId: number): Promise<void>
+}
+
+ResearchPaperService "1" *-- "1" ResearchPaperRepository
+ResearchPaperService "1" *-- "1" PrismaExceptionHandle
+ResearchPaperRepository "1" *-- "1" PrismaService
+ResearchPaperRepository "1" *-- "1" PrismaService
+ResearchPaperService "1" *-- "1" ResearchPaperRepository
+ResearchPaperController "1" *-- "1" ResearchPaperService
+ResearchPaperController --> CreateResearchPaperDto
+ResearchPaperController --> UpdateResearchPaperDto
+ResearchPaperController --> ResearchPaperDto
+ResearchPaperController --> ResearchPaper
+ResearchPaperService --> CreateResearchPaperDto
+ResearchPaperService --> UpdateResearchPaperDto
+ResearchPaperService --> ResearchPaperDto
+ResearchPaperService --> ResearchPaper
+@enduml

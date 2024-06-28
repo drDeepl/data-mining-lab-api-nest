@@ -1,0 +1,107 @@
+@startuml auth_module
+skinparam ArrowColor #252525
+skinparam ClassBackgroundColor #F0F1F5
+skinparam ClassBorderColor #252525
+skinparam ClassFontColor #252525
+
+class AuthService {
+  - userRepository: UserRepository
+  - jwtService: JwtService
+
+  + hashData(data: string): Promise<string>
+  + getTokens(userId: number, role: string): Promise<TokensDto>
+  + validateToken(token: string): Promise<TokenPayloadInterface>
+  + signUp(dto: SignUpDto): Promise<TokensDto>
+  + signIn(dto: SignInDto): Promise<TokensDto>
+}
+
+class UserRepository {
+  + create(data: any): Promise<User>
+  + findUnique(where: any): Promise<User>
+  + findFirst(where: any): Promise<User>
+  + findMany(where: any): Promise<User[]>
+  + delete(where: any): Promise<void>
+}
+
+class JwtService {
+  + signAsync(payload: any, options: any): Promise<string>
+  + verify(token: string, options: any): Promise<TokenPayloadInterface>
+}
+
+class TokensDto {
+  + constructor(accessToken: string)
+}
+
+class TokenPayloadInterface {
+  + sub: number
+  + role: string
+}
+
+class User {
+  + id: number
+  + email: string
+  + passwordHash: string
+  + firstName: string
+  + lastName: string
+  + groupId: number
+  + role: string
+}
+
+class SignUpDto {
+  + email: string
+  + password: string
+  + firstName: string
+  + lastName: string
+  + groupId: number
+}
+
+class SignInDto {
+  + email: string
+  + password: string
+}
+
+class AccessTokenStrategy extends PassportStrategy {
+    - configService: ConfigService
+    + constructor(configService: ConfigService)
+    + validate(payload: any): any
+}
+
+
+
+class PassportStrategy {
+    + constructor(options: any)
+}
+
+class ExtractJwt {
+    + fromAuthHeaderAsBearerToken(): TokenPayloadInterface
+}
+
+class AuthController {
+  - authService: AuthService
+  + signUp(createUserDto: SignUpDto): Promise<TokensDto>
+  + signIn(signInDto: SignInDto): Promise<TokensDto>
+}
+
+class AuthService {
+  + signUp(createUserDto: SignUpDto): Promise<TokensDto>
+  + signIn(signInDto: SignInDto): Promise<TokensDto>
+}
+
+
+AuthController "1" --> "1" AuthService
+
+AccessTokenStrategy --> PassportStrategy
+AccessTokenStrategy --> ExtractJwt 
+
+AuthService --> UserRepository
+AuthService --> JwtService
+AuthService --> TokensDto
+AuthService --> TokenPayloadInterface
+AuthService --> User
+AuthService --> SignUpDto
+AuthService --> SignInDto
+AuthService --> UserNotFoundException
+AuthService --> ForbiddenException
+AuthService --> UnauthorizedException
+
+@enduml

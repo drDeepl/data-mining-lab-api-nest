@@ -1,6 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { UserTeam } from '@prisma/client';
+import { Team, UserTeam } from '@prisma/client';
 import { PrismaService } from 'src/app/modules/prisma/prisma.service';
+import { AddedUserTeam } from '../interfaces/added-user-team.interface';
+import { UserTeamIncludeUser } from '../interfaces/user-tem-include-user.interface';
 
 @Injectable()
 export class TeamRepository {
@@ -12,17 +14,15 @@ export class TeamRepository {
   delete = this.prisma.team.delete;
   update = this.prisma.team.update;
 
-  async addUserToTeam(teamId: number, userId: number): Promise<UserTeam[]> {
-    throw new HttpException('TODO: TEAM MEMBERS DTO');
-    await this.prisma.userTeam.create({
-      data: {
-        teamId: teamId,
-        userId: userId,
-      },
-    });
-    return this.prisma.userTeam.findMany({
-      where: { teamId },
-      include: {
+  async addUserToTeam(teamId: number, userId: number): Promise<AddedUserTeam> {
+    return await this.prisma.userTeam.create({
+      select: {
+        team: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         user: {
           select: {
             id: true,
@@ -31,6 +31,25 @@ export class TeamRepository {
           },
         },
       },
+      data: {
+        teamId: teamId,
+        userId: userId,
+      },
+    });
+  }
+
+  async findTeamMembers(teamId: number): Promise<UserTeamIncludeUser[]> {
+    return this.prisma.userTeam.findMany({
+      select: {
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+      where: { teamId },
     });
   }
 }

@@ -7,6 +7,8 @@ import { TeamDto } from './dto/team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
 import { Team, UserTeam } from '@prisma/client';
 import { TeamMembersDto } from './dto/team-members.dto';
+import { AddedUserTeam } from './interfaces/added-user-team.interface';
+import { UserTeamIncludeUser } from './interfaces/user-tem-include-user.interface';
 
 @Injectable()
 export class TeamService {
@@ -75,11 +77,15 @@ export class TeamService {
 
   async addUserToTeam(userId: number, teamId: number): Promise<TeamMembersDto> {
     try {
-      const teamWithMembers: UserTeam = await this.teamRepository.addUserToTeam(
-        teamId,
-        userId,
+      const addedUserTeam: AddedUserTeam =
+        await this.teamRepository.addUserToTeam(teamId, userId);
+      const usersInTeam: UserTeamIncludeUser[] =
+        await this.teamRepository.findTeamMembers(teamId);
+      return new TeamMembersDto(
+        addedUserTeam.team.id,
+        addedUserTeam.team.name,
+        usersInTeam,
       );
-      return new TeamMembersDto();
     } catch (error) {
       throw this.prismaExceptionHandler.handleError(error);
     }

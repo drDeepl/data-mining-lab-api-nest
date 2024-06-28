@@ -1,0 +1,24 @@
+@startuml app_module
+
+skinparam ArrowColor #252525
+skinparam ClassBackgroundColor #F0F1F5
+skinparam ClassBorderColor #252525
+skinparam ClassFontColor #252525
+
+class AppModule{}
+class UserModule{}
+class TeamModule{}
+class ProjectModule{}
+class ContestModule{}
+class ApplicationContestModule{}
+class ResearchPaperModule{}
+class AuthModule{}
+
+AppModule "1" *-- "1" UserModule
+AppModule "1" *-- "1" TeamModule
+AppModule "1" *-- "1" ProjectModule
+AppModule "1" *-- "1" ContestModule
+AppModule "1" *-- "1" ApplicationContestModule
+AppModule "1" *-- "1" ResearchPaperModule
+AppModule "1" *-- "1" AuthModule
+@enduml

@@ -1,0 +1,70 @@
+@startuml user_module
+
+skinparam ArrowColor #252525
+skinparam ClassBackgroundColor #F0F1F5
+skinparam ClassBorderColor #252525
+skinparam ClassFontColor #252525
+
+class CreateUserDto{
+  + email: string
+  + firstName: string
+  + lastName: string
+  + groupId: number
+}
+
+class UpdateUserDto {
+  + email: string
+  + firstName: string
+  + lastName: string
+  + groupId: number
+}
+
+class UserDto {
+  + id: number
+  + email: string
+  + firstName: string
+  + lastName: string
+  + groupId: number
+}
+
+class UserRepository {
+  - prisma: PrismaService
+  + findFirst(): any
+  + findUnique(): any
+  + findMany(): any
+  + create(): any
+  + delete(): any
+  + update(): any
+}
+
+class UserService {
+
+  - userRepository: UserRepository
+  + getUsers(): Promise<UserDto[]>
+  + getUserById(userId: number): Promise<UserDto>
+  + updateUserById(userId: number, dto: UpdateUserDto): Promise<UserDto>
+  + deleteUserById(userId: number): Promise<any>
+}
+
+class UserController {
+
+  - userService: UserService
+  + getUsers(): Promise<any>
+  + getUserById(userId: number): Promise<any>
+  + editUserById(userId: number, editUserDto: UpdateUserDto): Promise<UserDto>
+  + deleteUserById(userId: number): Promise<void>
+}
+
+UserController "1" *-- "1" UserService
+UserService "1" *-- "1" UserRepository
+
+UserController --> CreateUserDto
+UserController --> UpdateUserDto
+UserController --> UserDto
+UserService --> CreateUserDto
+UserService --> UpdateUserDto
+UserService --> UserDto
+
+
+@enduml
+

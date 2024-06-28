@@ -1,0 +1,130 @@
+@startuml app_module
+
+skinparam ArrowColor #252525
+skinparam ClassBackgroundColor #F0F1F5
+skinparam ClassBorderColor #252525
+skinparam ClassFontColor #252525
+
+class AppModule{}
+class UserModule{}
+class TeamModule{}
+class ProjectModule{}
+class ContestModule{}
+class ApplicationContestModule{}
+class ResearchPaperModule{}
+class AuthModule{}
+
+class AuthService {
+  - userRepository: UserRepository
+  - jwtService: JwtService
+
+  + hashData(data: string): Promise<string>
+  + getTokens(userId: number, role: string): Promise<TokensDto>
+  + validateToken(token: string): Promise<TokenPayloadInterface>
+  + signUp(dto: SignUpDto): Promise<TokensDto>
+  + signIn(dto: SignInDto): Promise<TokensDto>
+}
+
+class UserRepository {
+  + create(data: any): Promise<User>
+  + findUnique(where: any): Promise<User>
+  + findFirst(where: any): Promise<User>
+  + findMany(where: any): Promise<User[]>
+  + delete(where: any): Promise<void>
+}
+
+class JwtService {
+  + signAsync(payload: any, options: any): Promise<string>
+  + verify(token: string, options: any): Promise<TokenPayloadInterface>
+}
+
+class AuthController {
+  - authService: AuthService
+  + signUp(createUserDto: SignUpDto): Promise<TokensDto>
+  + signIn(signInDto: SignInDto): Promise<TokensDto>
+}
+
+class AuthService {
+  + signUp(createUserDto: SignUpDto): Promise<TokensDto>
+  + signIn(signInDto: SignInDto): Promise<TokensDto>
+}
+
+class UserService {
+
+  - userRepository: UserRepository
+  + getUsers(): Promise<UserDto[]>
+  + getUserById(userId: number): Promise<UserDto>
+  + updateUserById(userId: number, dto: UpdateUserDto): Promise<UserDto>
+  + deleteUserById(userId: number): Promise<any>
+}
+
+class UserController {
+
+  - userService: UserService
+  + getUsers(): Promise<any>
+  + getUserById(userId: number): Promise<any>
+  + editUserById(userId: number, editUserDto: UpdateUserDto): Promise<UserDto>
+  + deleteUserById(userId: number): Promise<void>
+}
+
+class ApplicationContestRepository {
+  - prisma: PrismaService
+  + findFirst()
+  + findUnique()
+  + findMany()
+  + create()
+  + delete()
+  + update()
+}
+
+
+
+class ApplicationContestService {
+  - prismaExceptionHandler: PrismaExceptionHandler
+  - contestRepository: ApplicationContestRepository
+  + createApplicationContest(contestId: number, teamId: number, dto: CreateApplicationContestDto): Promise<ApplicationContestDto>
+  + updateApplicationContestById(id: number, dto: UpdateApplicationContestDto): Promise<ApplicationContestDto>
+  + deleteApplicationContestById(id: number): Promise<void>
+  + getApplicationContests(): Promise<ApplicationContestDto[]>
+  + getApplicationContestsByTeamId(teamId: number): Promise<ApplicationContestDto[]>
+  + getApplicationContestsByContestId(contestId: number): Promise<ApplicationContestDto[]>
+}
+
+class ApplicationContestController {
+
+  - contestService: ApplicationContestService
+  + createApplicationContest(createApplicationContestDto: CreateApplicationContestDto): Promise<ApplicationContestDto>
+  + updateApplicationContest(contestId: number, updateApplicationContestDto: UpdateApplicationContestDto): Promise<ApplicationContestDto>
+  + deleteApplicationContestById(contestId: number): Promise<void>
+  + getApplicationContest(): Promise<ApplicationContestDto[]>
+  + getApplicationContestsByTeamId(teamId: number): Promise<ApplicationContestDto[]>
+  + getApplicationContestsByContestId(contestId: number): Promise<ApplicationContestDto[]>
+}
+ApplicationContestRepository "1" *-- "1" PrismaService
+ApplicationContestService "1" *-- "1" ApplicationContestRepository
+ApplicationContestService "1" *-- "1" PrismaExceptionHandler
+ApplicationContestController "1" *-- "1" ApplicationContestService
+
+
+UserController "1" *-- "1" UserService
+UserService "1" *-- "1" UserRepository
+
+AuthController "1" --> "1" AuthService
+AuthService --> UserRepository
+AuthService --> JwtService
+
+
+
+
+AppModule "1" *-- "1" UserModule
+UserModule "1" *-- "1" UserController
+AppModule "1" *-- "1" TeamModule
+AppModule "1" *-- "1" ProjectModule
+AppModule "1" *-- "1" ContestModule
+AppModule "1" *-- "1" ApplicationContestModule
+ApplicationContestModule "1" *-- "1" ApplicationContestController
+AppModule "1" *-- "1" ResearchPaperModule
+AppModule "1" *-- "1" AuthModule
+AuthModule "1" *-- "1" AuthController
+
+@enduml
