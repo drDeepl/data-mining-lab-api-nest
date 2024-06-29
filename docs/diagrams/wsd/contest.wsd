@@ -6,30 +6,6 @@ skinparam ClassBorderColor #252525
 skinparam ClassFontColor #252525
 
 
-class CreateContestDto {
-  + name: string
-  + startContest: Date
-  + endContest: Date
-}
-class UpdateContestDto {
-  + name: string
-  + startContest: Date
-  + endContest: Date
-}
-
-class ContestDto {
-  + id: number
-  + name: string
-  + startContest: Date
-  + endContest: Date
-  + createdAt: Date
-}
-
-class CoverDto{
-    + id: number
-    + filename: string
-}
-
 
 class PrismaExceptionHandler {
   + handleError(error: any)
@@ -66,20 +42,8 @@ class ContestController {
 
 
 ContestController -> ContestService
-ContestController --> CreateContestDto
-ContestController --> UpdateContestDto
-ContestController --> ContestDto
-ContestController --> CoverDto
-CreateContestDto <--> ContestController
 ContestService "1" *-- "1" ContestRepository
 ContestService "1" *-- "1" PrismaExceptionHandler
-ContestService "1" o-- "1" CreateContestDto
-ContestService "1" o-- "1" UpdateContestDto
-ContestService --> ContestDto
-ContestService --> CreateContestDto
-ContestService --> UpdateContestDto
-ContestService --> ContestDto
-ContestService --> CoverDto
 ContestRepository "1" *-- "1" PrismaService
 
 

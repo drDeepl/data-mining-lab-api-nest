@@ -6,31 +6,6 @@ skinparam ClassBorderColor #252525
 skinparam ClassFontColor #252525
 
 
-class CreateTeamDto {
-  + name: string
-}
-class UpdateTeamDto {
-  + name: string
-}
-
-class TeamDto {
-  + id: number
-  + name: string
-  + createdAt: Date
-}
-
-class TeamExtendedMembersDto extends TeamDto{
-    + members: TeamMemberDto[]
-}
-
-class TeamMemberDto{
-    + id: number
-    + firstName: string
-    + lastName: string
-}
-
-
-
 class TeamRepository {
   - prisma: PrismaService
   + findFirst()
@@ -39,6 +14,19 @@ class TeamRepository {
   + create()
   + delete()
   + update()
+}
+
+
+class TeamController {
+  - teamService: TeamService
+  + addTeam(dto: CreateTeamDto): Promise<TeamDto>
+  + addUserTeam(userId:number): Promise<TeamExtendedMembersDto>
+  + deleteUserTeam(userId:number): Promise<void>
+  + moveUserTeam(userId:number, teamId:number): Promise<TeamExtendedMembersDto>
+  + updateTeam(teamId: number, dto: UpdateTeamDto): Promise<TeamDto>
+  + deleteTeamById(TeamId: number): Promise<void>
+  + getTeams(): Promise<TeamDto[]>
+  + getTeamMembers(teamId: number): Promise<TeamExtendedMembersDto[]>
 }
 
 class TeamService {
@@ -51,7 +39,7 @@ class TeamService {
   + updateTeamById(id: number, dto: UpdateTeamDto): Promise<TeamDto>
   + deleteTeamById(id: number): Promise<void>
   + getTeams(): Promise<TeamDto[]>
-  + getTeamMembers(): Promise<TeamExtendedMembersDto[]>
+  + getTeamMembers(teamId: number): Promise<TeamExtendedMembersDto[]>
 }
 
 
@@ -59,33 +47,9 @@ class PrismaExceptionHandler {
   + handleError(error: any)
 }
 
-class TeamController {
-  - teamService: TeamService
-  + addTeam(createTeamDto: CreateTeamDto): Promise<TeamDto>
-  + addUserTeam(userId:number): Promise<TeamExtendedMembersDto>
-  + deleteUserTeam(userId:number): Promise<void>
-  + moveUserTeam(userId:number, teamId:number): Promise<TeamExtendedMembersDto>
-  + updateTeam(teamId: number, updateTeamDto: UpdateTeamDto): Promise<TeamDto>
-  + deleteTeamById(TeamId: number): Promise<void>
-  + getTeams(): Promise<TeamDto[]>
-  + getTeamMembers(): Promise<TeamExtendedMembersDto[]>
-}
-
 TeamController -> TeamService
-TeamController --> CreateTeamDto
-TeamController --> UpdateTeamDto
-TeamController --> TeamDto
-TeamController --> CoverDto
-CreateTeamDto <--> TeamController
 TeamService "1" *-- "1" TeamRepository
 TeamService "1" *-- "1" PrismaExceptionHandler
-TeamService "1" o-- "1" CreateTeamDto
-TeamService "1" o-- "1" UpdateTeamDto
-TeamService --> TeamDto
-TeamService --> CreateTeamDto
-TeamService --> UpdateTeamDto
-TeamService --> TeamDto
-TeamService --> CoverDto
 TeamRepository "1" *-- "1" PrismaService
 
 

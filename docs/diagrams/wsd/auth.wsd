@@ -28,38 +28,6 @@ class JwtService {
   + verify(token: string, options: any): Promise<TokenPayloadInterface>
 }
 
-class TokensDto {
-  + constructor(accessToken: string)
-}
-
-class TokenPayloadInterface {
-  + sub: number
-  + role: string
-}
-
-class User {
-  + id: number
-  + email: string
-  + passwordHash: string
-  + firstName: string
-  + lastName: string
-  + groupId: number
-  + role: string
-}
-
-class SignUpDto {
-  + email: string
-  + password: string
-  + firstName: string
-  + lastName: string
-  + groupId: number
-}
-
-class SignInDto {
-  + email: string
-  + password: string
-}
-
 class AccessTokenStrategy extends PassportStrategy {
     - configService: ConfigService
     + constructor(configService: ConfigService)
@@ -72,9 +40,6 @@ class PassportStrategy {
     + constructor(options: any)
 }
 
-class ExtractJwt {
-    + fromAuthHeaderAsBearerToken(): TokenPayloadInterface
-}
 
 class AuthController {
   - authService: AuthService
@@ -95,13 +60,6 @@ AccessTokenStrategy --> ExtractJwt
 
 AuthService --> UserRepository
 AuthService --> JwtService
-AuthService --> TokensDto
-AuthService --> TokenPayloadInterface
-AuthService --> User
-AuthService --> SignUpDto
-AuthService --> SignInDto
-AuthService --> UserNotFoundException
-AuthService --> ForbiddenException
-AuthService --> UnauthorizedException
+
 
 @enduml

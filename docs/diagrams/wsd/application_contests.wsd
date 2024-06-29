@@ -6,20 +6,6 @@ skinparam ClassBorderColor #252525
 skinparam ClassFontColor #252525
 
 
-class CreateApplicationContestDto {
-  + githubLink: string
-  + googleDocsLink: string
-}
-class UpdateApplicationContestDto extends CreateApplicationContestDto {
-  
-}
-
-class ApplicationContestDto extends CreateApplicationContestDto {
-  + id: number
-  + teamId: number
-  + contestId: number
-}
-
 class PrismaExceptionHandler {
   + handleError(error: any)
 }
@@ -39,13 +25,15 @@ class ApplicationContestRepository {
 
 class ApplicationContestService {
   - prismaExceptionHandler: PrismaExceptionHandler
-  - contestRepository: ApplicationContestRepository
+  - applicationContestRepository: ApplicationContestRepository
+  - contestRepository: ContestRepository
   + createApplicationContest(contestId: number, teamId: number, dto: CreateApplicationContestDto): Promise<ApplicationContestDto>
   + updateApplicationContestById(id: number, dto: UpdateApplicationContestDto): Promise<ApplicationContestDto>
   + deleteApplicationContestById(id: number): Promise<void>
   + getApplicationContests(): Promise<ApplicationContestDto[]>
   + getApplicationContestsByTeamId(teamId: number): Promise<ApplicationContestDto[]>
   + getApplicationContestsByContestId(contestId: number): Promise<ApplicationContestDto[]>
+  
 }
 
 class ApplicationContestController {
@@ -62,20 +50,5 @@ ApplicationContestRepository "1" *-- "1" PrismaService
 ApplicationContestService "1" *-- "1" ApplicationContestRepository
 ApplicationContestService "1" *-- "1" PrismaExceptionHandler
 ApplicationContestController "1" *-- "1" ApplicationContestService
-
-ApplicationContestController --> CreateApplicationContestDto
-ApplicationContestController --> UpdateApplicationContestDto
-ApplicationContestController --> ApplicationContestDto
-CreateApplicationContestDto <--> ApplicationContestController
-
-ApplicationContestService "1" o-- "1" CreateApplicationContestDto
-ApplicationContestService "1" o-- "1" UpdateApplicationContestDto
-ApplicationContestService --> ApplicationContestDto
-ApplicationContestService --> CreateApplicationContestDto
-ApplicationContestService --> UpdateApplicationContestDto
-ApplicationContestService --> ApplicationContestDto
-
-
-
 
 @enduml

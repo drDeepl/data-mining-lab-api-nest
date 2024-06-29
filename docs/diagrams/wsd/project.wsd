@@ -5,33 +5,6 @@ skinparam ClassBackgroundColor #F0F1F5
 skinparam ClassBorderColor #252525
 skinparam ClassFontColor #252525
 
-class AddProjectDto{
-    + name:string
-    + description: string
-    + githubLink:string
-    + teamId: number
-}
-
-class UpdateProjectDto{
-    + name:string
-    + description: string
-    + githubLink:string
-}
-
-class ProjectDto{
-    + id: number
-    + name:string
-    + description: string
-    + githubLink:string
-    + teamId: number
-    + createdAt: Date
-
-}
-
-class CoverDto{
-    + id: number
-    + filename: string
-}
 
 class ProjectRepository {
   - prisma: PrismaService
@@ -48,12 +21,13 @@ class ProjectRepository {
 class ProjectService {
 
   - prismaExceptionHandler: PrismaExceptionHandler
-  - projectRepository: UserRepository
+  - projectRepository: ProjectRepository
   + addProject(createProjectDto: CreateProjectDto): Promise<ProjectDto>
   + addCoverProject(projectId: number, file: File): Promise<CoverDto>
   + deleteCoverProject(projectId: number): Promise<void>
   + getProjects(): Promise<ProjectDto[]>
   + getProjectById(projectId: number): Promise<ProjectDto>
+  + getProjectsByTeam(teamId: number): Promise<ProjectDto[]>
   + updateProjectById(projectId: number, dto: UpdateProjectDto): Promise<ProjectDto>
   + deleteProjectById(projectId: number): Promise<void>
 }
@@ -64,23 +38,15 @@ class ProjectController {
   + addProject(createProjectDto: CreateProjectDto): Promise<ProjectDto>
   + addCoverProject(projectId: number, file: File): Promise<CoverDto>
   + deleteCoverProject(projectId: number): Promise<void>
-  + getProjects(): Promise<any>
-  + getProjectById(projectId: number): Promise<any>
-  + editProjectById(projectId: number, editProjectDto: UpdateProjectDto): Promise<UserDto>
+  + getProjects(): Promise<ProjectDto[]>
+  + getProjectById(projectId: number): Promise<ProjectDto[]>
+  + getProjectsByTeam(teamId: number): Promise<ProjectDto[]>
+  + editProjectById(projectId: number, editProjectDto: UpdateProjectDto): Promise<ProjectDto>
   + deleteProjectById(projectId: number): Promise<void>
 }
 
 ProjectController "1" *-- "1" ProjectService
 ProjectController --> createException
-AddProjectDto --> ProjectController
-UpdateProjectDto --> ProjectController
-ProjectDto --> ProjectController
-CoverDto --> ProjectController
-
-AddProjectDto --> ProjectService
-UpdateProjectDto --> ProjectService
-ProjectDto --> ProjectService
-CoverDto --> ProjectService
 
 ProjectService "1" *-- "1" ProjectRepository
 @enduml
