@@ -10,6 +10,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ContestModule } from '../contest/contest.module';
 import { TeamModule } from '../team/team.module';
+import { AdminUserModule } from '../admin-user/admin-user.module';
+import { AdminResearchPaperModule } from '../admin-research-paper/admin-research-paper.module';
+import { AdminContestModule } from '../admin-contest/admin-contest.module';
 
 @Module({
   imports: [
@@ -29,8 +32,11 @@ import { TeamModule } from '../team/team.module';
     }),
     PrismaModule,
     AuthModule,
+    AdminUserModule,
     UserModule,
+    AdminResearchPaperModule,
     ResearchPaperModule,
+    AdminContestModule,
     ContestModule,
     TeamModule,
   ],
