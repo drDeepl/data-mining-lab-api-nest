@@ -11,7 +11,7 @@ import { ResearchPaperDto } from '../research-paper/dto/research-paper.dto';
 import { UpdateResearchPaperDto } from '../research-paper/dto/update-research-paper.dto';
 
 @ApiTags("AdminResearchPaperController")
-@Controller('admin-research-paper')
+@Controller('admin-research-papers')
 export class AdminResearchPaperController {
     private readonly logger = new Logger(AdminResearchPaperController.name);
 
@@ -37,7 +37,7 @@ export class AdminResearchPaperController {
   })
   @Roles(ROLE.ADMIN)
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @Post('/admins')
+  @Post('/')
   async addResearchPaper(
     @Body() createResearchPaperDto: CreateResearchPaperDto,
   ): Promise<ResearchPaperDto> {
@@ -70,7 +70,7 @@ export class AdminResearchPaperController {
   })
   @Roles(ROLE.ADMIN)
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @Put('/admins/:researchPaperId')
+  @Put('/:researchPaperId')
   async editResearchPaperById(
     @Param('researchPaperId', ParseIntPipe) researchPaperId: number,
     @Body() updateResearchPaperDto: UpdateResearchPaperDto,
@@ -102,7 +102,7 @@ export class AdminResearchPaperController {
   })
   @Roles(ROLE.ADMIN)
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @Delete('/admins/:researchPaperId')
+  @Delete('/:researchPaperId')
   async deleteResearchPaper(
     @Param('researchPaperId', ParseIntPipe) researchPaperId: number,
   ): Promise<void> {

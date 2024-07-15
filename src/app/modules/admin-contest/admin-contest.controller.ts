@@ -12,7 +12,7 @@ import { UpdateContestDto } from '../contest/dto/update-contest.dto';
 
 
 @ApiTags("AdminContestController")
-@Controller('admin-contest')
+@Controller('admin-contests')
 export class AdminContestController {
     private readonly logger = new Logger(AdminContestController.name);
 
@@ -39,7 +39,7 @@ export class AdminContestController {
     })
     @Roles(ROLE.ADMIN)
     @UseGuards(JwtAuthGuard, RoleGuard)
-    @Post('/admins')
+    @Post('/')
     async createContest(
       @Body() createContestDto: CreateContestDto,
     ): Promise<ContestDto> {
@@ -71,7 +71,7 @@ export class AdminContestController {
     })
     @Roles(ROLE.ADMIN)
     @UseGuards(JwtAuthGuard, RoleGuard)
-    @Put('/admins/:contestId')
+    @Put('/:contestId')
     async updateContest(
       @Param('contestId', ParseIntPipe) contestId: number,
       @Body() updateContestDto: UpdateContestDto,
@@ -103,7 +103,7 @@ export class AdminContestController {
     })
     @Roles(ROLE.ADMIN)
     @UseGuards(JwtAuthGuard, RoleGuard)
-    @Delete('/admins/:contestId')
+    @Delete('/:contestId')
     async deleteContestById(
       @Param('contestId', ParseIntPipe) contestId: number,
     ): Promise<void> {

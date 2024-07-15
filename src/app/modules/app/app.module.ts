@@ -13,6 +13,7 @@ import { TeamModule } from '../team/team.module';
 import { AdminUserModule } from '../admin-user/admin-user.module';
 import { AdminResearchPaperModule } from '../admin-research-paper/admin-research-paper.module';
 import { AdminContestModule } from '../admin-contest/admin-contest.module';
+import { AdminTeamModule } from '../admin-team/admin-team.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { AdminContestModule } from '../admin-contest/admin-contest.module';
     ResearchPaperModule,
     AdminContestModule,
     ContestModule,
+    AdminTeamModule,
     TeamModule,
   ],
   controllers: [AppController],

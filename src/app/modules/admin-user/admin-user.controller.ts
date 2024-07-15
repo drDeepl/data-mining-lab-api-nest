@@ -10,7 +10,7 @@ import { UserDto } from '../user/dto/user.dto';
 import { OwnerUserGuard } from '../auth/guards/owner-user.guard';
 
 @ApiTags("AdminUserController")
-@Controller('admin-user')
+@Controller('admin-users')
 export class AdminUserController {
     private readonly logger = new Logger(AdminUserController.name);
     constructor(private readonly userService: UserService) {}
