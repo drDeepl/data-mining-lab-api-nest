@@ -82,7 +82,7 @@ export class AdminContestController {
           updateContestDto,
         );
       } catch (error) {
-        createException(error, this.logger);
+        throw createException(error, this.logger);
       }
     }
   
@@ -110,7 +110,7 @@ export class AdminContestController {
       try {
         await this.contestService.deleteContestById(contestId);
       } catch (error) {
-        createException(error, this.logger);
+        throw createException(error, this.logger);
       }
     }
   

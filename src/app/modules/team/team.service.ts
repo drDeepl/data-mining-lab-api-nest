@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { teamPrismaErrorMessage } from 'src/app/constants/messages/error-prisma-exception-description';
 import { PrismaExceptionHandler } from 'src/app/helpers/PrismaExceptionHandler';
 import { TeamRepository } from './repository/team.repository';
@@ -6,9 +6,10 @@ import { CreateTeamDto } from './dto/create-team.dto';
 import { TeamDto } from './dto/team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
 import { Team, UserTeam } from '@prisma/client';
-import { TeamMembersDto } from './dto/team-members.dto';
 import { AddedUserTeam } from './interfaces/added-user-team.interface';
-import { UserTeamIncludeUser } from './interfaces/user-tem-include-user.interface';
+import { UserTeamExtendedUser } from './interfaces/user-team-extended-user.interface';
+import { ExistsException } from 'src/app/exceptions/ExistsException';
+import { TeamMemberDto } from './dto/team-member.dto';
 
 @Injectable()
 export class TeamService {
@@ -75,19 +76,27 @@ export class TeamService {
     }
   }
 
-  async addUserToTeam(userId: number, teamId: number): Promise<TeamMembersDto> {
+  async addUserToTeam(teamId: number, userId: number, ): Promise<void> {
     try {
-      const addedUserTeam: AddedUserTeam =
+      
+      const userExistsInTeam: boolean = await this.teamRepository.isUserExistsInTeam(teamId, userId)
+      if(!userExistsInTeam){
         await this.teamRepository.addUserToTeam(teamId, userId);
-      const usersInTeam: UserTeamIncludeUser[] =
-        await this.teamRepository.findTeamMembers(teamId);
-      return new TeamMembersDto(
-        addedUserTeam.team.id,
-        addedUserTeam.team.name,
-        usersInTeam,
-      );
+      }
+      throw new ExistsException("Пользователь уже добавлен в выбранную команду")
+      
     } catch (error) {
       throw this.prismaExceptionHandler.handleError(error);
     }
+  }
+
+  async getTeamsMembers(teamId: number): Promise<TeamMemberDto[]>{
+    try{
+      return await this.teamRepository.getTeamsMembers(teamId)
+    }
+    catch (error) {
+      throw this.prismaExceptionHandler.handleError(error);
+    }
+
   }
 }

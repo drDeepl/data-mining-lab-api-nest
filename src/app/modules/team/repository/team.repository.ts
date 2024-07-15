@@ -2,7 +2,8 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { Team, UserTeam } from '@prisma/client';
 import { PrismaService } from 'src/app/modules/prisma/prisma.service';
 import { AddedUserTeam } from '../interfaces/added-user-team.interface';
-import { UserTeamIncludeUser } from '../interfaces/user-tem-include-user.interface';
+import { UserTeamExtendedUser } from '../interfaces/user-team-extended-user.interface';
+import { TeamMemberDto } from '../dto/team-member.dto';
 
 @Injectable()
 export class TeamRepository {
@@ -14,23 +15,18 @@ export class TeamRepository {
   delete = this.prisma.team.delete;
   update = this.prisma.team.update;
 
-  async addUserToTeam(teamId: number, userId: number): Promise<AddedUserTeam> {
-    return await this.prisma.userTeam.create({
-      select: {
-        team: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
-      },
+  async isUserExistsInTeam(teamId: number, userId: number): Promise<boolean>{
+    const userTeam: UserTeam = await this.prisma.userTeam.findFirst({
+      where:{
+        teamId: teamId,
+        userId: userId
+      }
+    })
+    return !!userTeam
+  }
+
+  async addUserToTeam(teamId: number, userId: number): Promise<void> {
+    await this.prisma.userTeam.create({
       data: {
         teamId: teamId,
         userId: userId,
@@ -38,18 +34,18 @@ export class TeamRepository {
     });
   }
 
-  async findTeamMembers(teamId: number): Promise<UserTeamIncludeUser[]> {
-    return this.prisma.userTeam.findMany({
-      select: {
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
+ 
+  async getTeamsMembers(teamId: number): Promise<TeamMemberDto[]>{
+    const usersTeam: UserTeamExtendedUser[] = await this.prisma.userTeam.findMany({
+      where: {
+        teamId: teamId,
       },
-      where: { teamId },
-    });
+      include:{
+        user:true
+      }
+    })
+    console.log(usersTeam)
+    return usersTeam.map(userTeam => new TeamMemberDto(userTeam.user))
   }
+  
 }

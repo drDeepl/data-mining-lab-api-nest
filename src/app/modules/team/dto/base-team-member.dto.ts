@@ -3,7 +3,7 @@ import { IsNotEmpty } from 'class-validator';
 
 export class BaseTeamMemberDto {
   @ApiProperty({
-    description: 'группа пользователя(если он является студентом)',
+    description: 'id пользователя',
     required: true,
     nullable: false,
   })

@@ -41,7 +41,7 @@ export class ContestController {
     try {
       return await this.contestService.getContests();
     } catch (error) {
-      createException(error, this.logger);
+      throw createException(error, this.logger);
     }
   }
 }

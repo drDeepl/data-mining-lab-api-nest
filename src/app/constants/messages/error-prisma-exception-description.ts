@@ -52,6 +52,10 @@ export const teamPrismaErrorMessage: {
   },
   P2025: {
     statusCode: HttpStatus.NOT_FOUND,
-    description: 'Запрашиваемого конкурса не существует',
+    description: 'Такой команды не существует',
+  },
+  P2003: {
+    statusCode: HttpStatus.BAD_REQUEST,
+    description: 'Несуществующий пользователь или команда',
   },
 };

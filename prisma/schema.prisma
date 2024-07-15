@@ -42,7 +42,7 @@ model User {
 
 model Team {
   id           Int       @id @default(autoincrement()) 
-  name         String    @db.VarChar(64) 
+  name         String    @db.VarChar(64) @unique
   createdAt    DateTime  @db.Timestamp() @default(now())        @map("created_at")
   users        UserTeam[]
   projects     Project[]

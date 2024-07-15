@@ -109,7 +109,7 @@ export class AdminResearchPaperController {
     try {
       await this.researchPaperService.deleteResearchPaperById(researchPaperId);
     } catch (error) {
-      createException(error, this.logger);
+      throw createException(error, this.logger);
     }
   }
 

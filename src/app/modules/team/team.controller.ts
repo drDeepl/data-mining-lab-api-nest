@@ -21,6 +21,10 @@ import { Roles } from '../auth/role/roles';
 import { TeamDto } from './dto/team.dto';
 import { createException } from 'src/app/helpers/create-exception.helper';
 import { CreateTeamDto } from './dto/create-team.dto';
+import { TeamMemberDto } from './dto/team-member.dto';
+import { OwnerUserGuard } from '../auth/guards/owner-user.guard';
+import { MemberTeamGuard } from './guards/member-team.guard';
+import { AuthorizedRequest } from '../auth/type/authorized-request';
 
 @ApiTags('TeamController')
 @Controller('teams')
@@ -28,11 +32,16 @@ export class TeamController {
   private readonly logger = new Logger(TeamController.name);
 
   constructor(private readonly teamService: TeamService) {}
-  @ApiOperation({ summary: 'получение списка членов команды' })
+
+
+
+  @ApiOperation({ summary: 'получение списка членов команды для текущего пользователя' })
   @ApiResponse({ status: HttpStatus.OK, type: TeamDto })
   @ApiBody({
-    type: CreateTeamDto,
     description: 'данные для обновления команды',
+    type: TeamMemberDto,
+    isArray: true
+    
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -42,20 +51,17 @@ export class TeamController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'пользователь неавторизован',
   })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'недостаточно прав',
-  })
-  @Roles(ROLE.ADMIN)
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Get('/:teamId')
+  @UseGuards(JwtAuthGuard, MemberTeamGuard)
+  @Get('/:teamId/users')
   async getMembersTeam(
-    @Param('teamId', ParseIntPipe) teamId: number
-    ){
+    @Param('teamId', ParseIntPipe) teamId: number,
+     req: AuthorizedRequest
+    ): Promise< TeamMemberDto[]>{
     try {
-      throw new NotImplementedException()
+      return await this.teamService.getTeamsMembers(teamId)    
+      
     } catch (error) {
-      createException(error, this.logger);
+     throw createException(error, this.logger);
     }
   }
 

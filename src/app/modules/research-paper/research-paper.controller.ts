@@ -34,7 +34,7 @@ export class ResearchPaperController {
     try {
       return await this.researchPaperService.findResearchPapers();
     } catch (error) {
-      createException(error, this.logger);
+      throw createException(error, this.logger);
     }
   }
 }
