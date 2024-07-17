@@ -55,7 +55,6 @@ export class TeamController {
   @Get('/:teamId/users')
   async getMembersTeam(
     @Param('teamId', ParseIntPipe) teamId: number,
-     req: AuthorizedRequest
     ): Promise< TeamMemberDto[]>{
     try {
       return await this.teamService.getTeamsMembers(teamId)    

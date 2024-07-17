@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, NotFoundException, NotImplementedException } from '@nestjs/common';
 import { ResearchPaper } from '@prisma/client';
 import { PrismaExceptionHandler } from 'src/app/helpers/PrismaExceptionHandler';
 import { researchPaperPrismaErrorMessage } from 'src/app/constants/messages/error-prisma-exception-description';
@@ -89,6 +89,31 @@ export class ResearchPaperService {
           ),
       );
     } catch (error) {
+      this.prismaExceptionHandler.handleError(error);
+    }
+  }
+
+  async setUserResearchPaper(userId: number, researchPaperId: number): Promise<void>{
+    try{
+      this.logger.debug(`${userId}: ${researchPaperId}`)
+      const researchPaper: ResearchPaper = await this.researchPaperRepository.findUnique({
+        where:{
+          id: researchPaperId
+        }
+      })
+      
+      if(!!researchPaper){
+        if(researchPaper.isFree){
+          await this.researchPaperRepository.setUserResearchPaper(userId, researchPaperId)
+          return
+        }
+        throw new HttpException("Тема для научной статьи уже выбрана кем-то", HttpStatus.BAD_REQUEST)
+      }
+      throw new NotFoundException("Тема для научной статьи не найдена")
+      
+      
+    }
+    catch (error) {
       this.prismaExceptionHandler.handleError(error);
     }
   }

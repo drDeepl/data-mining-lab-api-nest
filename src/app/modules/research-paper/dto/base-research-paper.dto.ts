@@ -7,7 +7,7 @@ export class BaseResearchPaperDto {
     required: true,
     nullable: false,
   })
-  @IsNotEmpty()
+  @IsNotEmpty({message: "название не может быть пустым"})
   @MaxLength(128, {
     message: 'длина названия статьи не может быть больше 128 символов',
   })
@@ -18,7 +18,7 @@ export class BaseResearchPaperDto {
     required: true,
     nullable: false,
   })
-  @IsNotEmpty()
+  @IsNotEmpty({message: "описание не может быть пустым"})
   @MaxLength(255, {
     message: 'длина описания статьи не может быть больше 255 символов',
   })

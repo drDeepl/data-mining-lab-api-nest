@@ -35,7 +35,7 @@ model User {
   groupId      Int?       @map("group_id")
   group        Group?     @relation(fields: [groupId], references: [id])
   teams       UserTeam[]
-  
+  userResearchPapers UserResearchPaper[]
   @@map("users")
 }
 
@@ -128,8 +128,18 @@ model ResearchPaper{
   description  String    @db.Text
   isFree       Boolean   @default(true)                                       @map("is_free")
   createdAt    DateTime  @db.Timestamp() @default(now())                    @map("created_at")
+  userResearchPapers UserResearchPaper[]
 
   @@map("research_papers")
+}
+
+model UserResearchPaper{
+  id                Int             @id @default(autoincrement()) 
+  userId            Int             @map("user_id")
+  user              User            @relation(fields: [userId], references: [id])
+  researchPaperId   Int             @map("research_paper_id")
+  users          ResearchPaper      @relation(fields: [researchPaperId], references: [id])
+
 }
 
 enum ROLE {

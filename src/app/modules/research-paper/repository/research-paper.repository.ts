@@ -11,4 +11,25 @@ export class ResearchPaperRepository {
   create = this.prisma.researchPaper.create;
   update = this.prisma.researchPaper.update;
   delete = this.prisma.researchPaper.delete;
+
+  async setUserResearchPaper(userId: number, researchPaperId: number): Promise<void>{
+    await this.prisma.$transaction([
+      this.prisma.userResearchPaper.create({
+        data:{
+          userId: userId,
+          researchPaperId: researchPaperId
+        }
+      }),
+
+      this.prisma.researchPaper.update({
+        data: {
+          isFree: false
+        },
+        where:{
+          id: researchPaperId,
+        }
+      })
+
+    ])
+  }
 }
