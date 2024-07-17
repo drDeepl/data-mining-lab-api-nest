@@ -6,6 +6,9 @@ import { ContestRepository } from './repository/contest.repository';
 import { ContestDto } from './dto/contest.dto';
 import { CreateContestDto } from './dto/create-contest.dto';
 import { UpdateContestDto } from './dto/update-contest.dto';
+import { ApplicationContestDto } from './dto/applicaiton-contest/application-contest.dto';
+import { CreateApplicationContestDto } from './dto/applicaiton-contest/create-application-contest.dto';
+import { ApplicationContestExtendedContestTeam } from './interfaces/application-contest/application-contest-extended-contest-team.interface';
 
 @Injectable()
 export class ContestService {
@@ -78,6 +81,17 @@ export class ContestService {
         },
       });
     } catch (error) {
+      throw this.prismaExceptionHandler.handleError(error);
+    }
+  }
+
+  async createApplicationContest(contestId: number, teamId:number, dto: CreateApplicationContestDto): Promise<ApplicationContestDto>{
+    this.logger.debug("CREATEA APPLICATION")
+    try{
+      const createdApplicationContestL: ApplicationContestExtendedContestTeam = await this.contestRepository.createApplicationContest(contestId, teamId, dto)
+      return new ApplicationContestDto(createdApplicationContestL)
+    }
+    catch (error) {
       throw this.prismaExceptionHandler.handleError(error);
     }
   }
