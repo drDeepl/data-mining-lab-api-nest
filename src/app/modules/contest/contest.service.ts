@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Contest } from '@prisma/client';
+import { ApplicationContest, Contest } from '@prisma/client';
 import { contestPrismaErrorMessage } from 'src/app/constants/messages/error-prisma-exception-description';
 import { PrismaExceptionHandler } from 'src/app/helpers/PrismaExceptionHandler';
 import { ContestRepository } from './repository/contest.repository';
@@ -9,6 +9,7 @@ import { UpdateContestDto } from './dto/update-contest.dto';
 import { ApplicationContestDto } from './dto/applicaiton-contest/application-contest.dto';
 import { CreateApplicationContestDto } from './dto/applicaiton-contest/create-application-contest.dto';
 import { ApplicationContestExtendedContestTeam } from './interfaces/application-contest/application-contest-extended-contest-team.interface';
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class ContestService {
@@ -95,4 +96,14 @@ export class ContestService {
       throw this.prismaExceptionHandler.handleError(error);
     }
   }
+
+  subscribeSocket(socket: Socket) {
+    console.log("SUBSCRIBE SOCKET:", socket)
+    // return socket.join(`applicationContest_${applicationContest.id}`);
+  }
+
+  unsubscribeSocket(socket: Socket) {
+    console.log("UNSUBSCRIBE SOCKET:", socket)
+  }
+
 }
