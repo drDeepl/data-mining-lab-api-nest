@@ -4,19 +4,19 @@
 
 <h6>Роли приложения</h6>
 
-![projects-use-cases](./docs\diagrams\use-cases\roles-use-cases.jpg)
+![projects-use-cases](./docs/diagrams/use-cases/roles-use-cases.jpg)
 
 <h6>Проекты студентов</h6>
 
-![projects-use-cases](./docs\diagrams\use-cases\projects-use-cases.jpg)
+![projects-use-cases](./docs/diagrams/use-cases/projects-use-cases.jpg)
 
 <h6>Анонсы конкурсов</h6>
 
-![projects-use-cases](./docs\diagrams\use-cases\contests-use-cases.jpg)
+![projects-use-cases](./docs/diagrams/use-cases/contests-use-cases.jpg)
 
 <h6>Темы научных статей</h6>
 
-![projects-use-cases](./docs\diagrams\use-cases\research-papers-use-cases.jpg)
+![projects-use-cases](./docs/diagrams/use-cases/research-papers-use-cases.jpg)
 
 </details></h2>
 
