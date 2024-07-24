@@ -1,13 +1,10 @@
-## Диаграмма вариантов использования
-![schema_db](./docs/diagrams/img/use_case_data_mining_lab_api.jpg)
-
-## Схема базы данных
-
-![schema_db](./docs/diagrams/img/data_mining_lab_schema_db_v3.svg)
-
 <h2><details>
 
 <summary>Пользовательские сценарии</summary>
+
+<h6>Роли приложения</h6>
+
+![projects-use-cases](./docs\diagrams\use-cases\roles-use-cases.jpg)
 
 <h6>Проекты студентов</h6>
 
@@ -22,6 +19,10 @@
 ![projects-use-cases](./docs\diagrams\use-cases\research-papers-use-cases.jpg)
 
 </details></h2>
+
+## Схема базы данных
+
+![schema_db](./docs/diagrams/img/data_mining_lab_schema_db_v3.svg)
 
 
 ## Установка
