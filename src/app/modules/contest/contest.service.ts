@@ -10,6 +10,7 @@ import { ApplicationContestDto } from './dto/applicaiton-contest/application-con
 import { CreateApplicationContestDto } from './dto/applicaiton-contest/create-application-contest.dto';
 import { ApplicationContestExtendedContestTeam } from './interfaces/application-contest/application-contest-extended-contest-team.interface';
 import { Socket } from 'socket.io';
+import { ContestGateway } from './gateway/contest.gateway';
 
 @Injectable()
 export class ContestService {
@@ -18,7 +19,10 @@ export class ContestService {
     contestPrismaErrorMessage,
   );
 
-  constructor(private readonly contestRepository: ContestRepository) {}
+  constructor(
+    private readonly contestRepository: ContestRepository,
+    private readonly contestGateway: ContestGateway,
+  ) {}
 
   async createContest(dto: CreateContestDto): Promise<ContestDto> {
     try {
@@ -61,6 +65,9 @@ export class ContestService {
         updatedContest.endContest,
         updatedContest.createdAt,
       );
+      const sockets = await this.getSockets();
+
+      console.log('SOCKETS', sockets);
     } catch (error) {
       throw this.prismaExceptionHandler.handleError(error);
     }
@@ -86,24 +93,25 @@ export class ContestService {
     }
   }
 
-  async createApplicationContest(contestId: number, teamId:number, dto: CreateApplicationContestDto): Promise<ApplicationContestDto>{
-    this.logger.debug("CREATEA APPLICATION")
-    try{
-      const createdApplicationContestL: ApplicationContestExtendedContestTeam = await this.contestRepository.createApplicationContest(contestId, teamId, dto)
-      return new ApplicationContestDto(createdApplicationContestL)
-    }
-    catch (error) {
+  async createApplicationContest(
+    contestId: number,
+    teamId: number,
+    dto: CreateApplicationContestDto,
+  ): Promise<ApplicationContestDto> {
+    this.logger.debug('CREATEA APPLICATION');
+    try {
+      const createdApplicationContestL: ApplicationContestExtendedContestTeam =
+        await this.contestRepository.createApplicationContest(
+          contestId,
+          teamId,
+          dto,
+        );
+      return new ApplicationContestDto(createdApplicationContestL);
+    } catch (error) {
       throw this.prismaExceptionHandler.handleError(error);
     }
   }
-
-  subscribeSocket(socket: Socket) {
-    console.log("SUBSCRIBE SOCKET:", socket)
-    // return socket.join(`applicationContest_${applicationContest.id}`);
+  async getSockets() {
+    return this.contestGateway.io.sockets;
   }
-
-  unsubscribeSocket(socket: Socket) {
-    console.log("UNSUBSCRIBE SOCKET:", socket)
-  }
-
 }

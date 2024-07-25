@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { NextFunction } from 'express';
-import { SocketWithAuth } from '../types';
+import { SocketWithAuth } from './types';
 import { AuthService } from 'src/app/modules/auth/auth.service';
 import { TokenPayloadInterface } from 'src/app/modules/auth/interfaces/token-payload.interface';
 

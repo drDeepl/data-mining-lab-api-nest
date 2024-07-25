@@ -8,7 +8,7 @@ import {
 import { Namespace } from 'socket.io';
 import * as config from 'dotenv';
 import { Logger } from '@nestjs/common';
-import { SocketWithAuth } from './types';
+import { SocketWithAuth } from '../midlewares/types';
 
 const wss_settings = {
   port: parseInt(process.env.WS_PORT),
@@ -21,10 +21,10 @@ const wss_settings = {
   pingInterval: wss_settings.ping_interval,
   pingTimeout: wss_settings.ping_timeout,
 })
-export class WssGateway
+export class ContestGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  private readonly logger = new Logger(WssGateway.name);
+  private readonly logger = new Logger(ContestGateway.name);
 
   @WebSocketServer()
   io: Namespace;
@@ -35,7 +35,7 @@ export class WssGateway
     this.logger.log('Websocket gateway initialized');
   }
 
-  public async handleConnection(client: SocketWithAuth) {
+  async handleConnection(client: SocketWithAuth) {
     const sockets = this.io.sockets;
 
     this.logger.log(
@@ -45,7 +45,7 @@ export class WssGateway
     this.io.emit('hello', `from ${client.id}`);
   }
 
-  public async handleDisconnect(client: SocketWithAuth) {
+  async handleDisconnect(client: SocketWithAuth) {
     const sockets = this.io.sockets;
 
     this.logger.log(

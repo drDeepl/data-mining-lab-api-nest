@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { Server, ServerOptions } from 'socket.io';
-import { createTokenMidleware } from './midlewares/create-token.midleware';
+import { createTokenMidleware } from '../modules/contest/midlewares/create-token.midleware';
 import { AuthService } from 'src/app/modules/auth/auth.service';
 
 export class SocketIOAdapter extends IoAdapter {
