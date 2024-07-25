@@ -1,20 +1,41 @@
-import { INestApplication, NotImplementedException } from "@nestjs/common";
-import { IoAdapter } from "@nestjs/platform-socket.io";
-import { NextFunction } from "express";
-import { ServerOptions, Server, Socket } from "socket.io";
-import * as jwt from 'jsonwebtoken';
-import config from "config";
+import { INestApplication, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { IoAdapter } from '@nestjs/platform-socket.io';
+import { Server, ServerOptions } from 'socket.io';
+import { createTokenMidleware } from './midlewares/create-token.midleware';
+import { AuthService } from 'src/app/modules/auth/auth.service';
 
-const jwt_secret: string = config.get("JWT_SECRET");
+export class SocketIOAdapter extends IoAdapter {
+  private readonly logger = new Logger(SocketIOAdapter.name);
 
+  constructor(
+    private app: INestApplication,
+    private configService: ConfigService,
+  ) {
+    super(app);
+  }
 
+  createIOServer(port: number, options?: ServerOptions) {
+    const cors = {
+      origin: '*',
+    };
 
-export class CustomIoAdapter extends IoAdapter{
-    constructor(app: INestApplication){
-        super(app);
-    }
+    this.logger.log('Configuring SocketIO server with custom CORS options', {
+      cors,
+    });
 
-    createIOServer(port: number, options?: ServerOptions): Server {
-      throw new NotImplementedException("CREATE IO SERVER")
-    }
+    const optionsWithCORS: ServerOptions = {
+      ...options,
+      cors,
+    };
+
+    const jwtService = this.app.get(JwtService);
+    const authService = this.app.get(AuthService);
+    const server: Server = super.createIOServer(port, optionsWithCORS);
+    server
+      .of('contests')
+      .use(createTokenMidleware(jwtService, this.logger, authService));
+    return server;
+  }
 }

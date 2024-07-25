@@ -14,6 +14,7 @@ import { AdminUserModule } from '../admin-user/admin-user.module';
 import { AdminResearchPaperModule } from '../admin-research-paper/admin-research-paper.module';
 import { AdminContestModule } from '../admin-contest/admin-contest.module';
 import { AdminTeamModule } from '../admin-team/admin-team.module';
+import { WssModule } from 'src/wss/wss.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { AdminTeamModule } from '../admin-team/admin-team.module';
     ContestModule,
     AdminTeamModule,
     TeamModule,
+    WssModule,
   ],
   controllers: [AppController],
   providers: [AppService],

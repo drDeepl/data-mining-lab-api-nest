@@ -27,7 +27,7 @@ export class OwnerUserGuard implements CanActivate {
       }
       const tokenPayload: TokenPayloadInterface =
         await this.authService.validateToken(accessToken);
-      if (tokenPayload.sub === Number(request.params.id)) {
+      if (Number(tokenPayload.sub) === Number(request.params.id)) {
         return true;
       }
       throw new ForbiddenException('Недостаточно прав для редактирования');

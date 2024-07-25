@@ -27,5 +27,6 @@ import { UserRepository } from '../user/repository/user.repository';
     AuthService,
   ],
   controllers: [AuthController],
+  exports: [PassportModule],
 })
 export class AuthModule {}
