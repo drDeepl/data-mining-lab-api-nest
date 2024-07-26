@@ -59,3 +59,16 @@ export const teamPrismaErrorMessage: {
     description: 'Несуществующий пользователь или команда',
   },
 };
+
+export const applicationContestPrismaErrorMessage: {
+  [key: string]: { statusCode: number; description: string };
+} = {
+  P2003: {
+    statusCode: HttpStatus.NOT_FOUND,
+    description: 'выбранной группы или команды не существует',
+  },
+  P2025: {
+    statusCode: HttpStatus.NOT_FOUND,
+    description: 'Запрашиваемого заявки не существует',
+  },
+};

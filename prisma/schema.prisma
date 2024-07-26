@@ -106,8 +106,8 @@ model ApplicationContest {
   team           Team      @relation(fields: [teamId], references: [id])      
   githubLink     String    @db.VarChar(128)                                 @map("github_link")
   googleDocsLink String    @db.VarChar(128)                                 @map("google_docs_link")
-  createdAt    DateTime  @db.Timestamp() @default(now())                    @map("created_at")
-  
+  createdAt      DateTime  @db.Timestamp() @default(now())                    @map("created_at")
+  status         CONTEST_STATUS @default(SENDED)
   @@map("applications_contests")
 }
 
@@ -145,4 +145,10 @@ model UserResearchPaper{
 enum ROLE {
   USER
   ADMIN
+}
+
+enum CONTEST_STATUS {
+  SENDED
+  APPROVED
+  REJECTED
 }

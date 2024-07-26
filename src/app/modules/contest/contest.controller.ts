@@ -11,10 +11,10 @@ import {
   Post,
   Put,
   UseGuards,
-  Request
+  Request,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ContestService } from './contest.service';
+import { ContestService } from './services/contest.service';
 import { ContestDto } from './dto/contest.dto';
 
 import { createException } from 'src/app/helpers/create-exception.helper';
@@ -23,15 +23,18 @@ import { CreateApplicationContestDto } from './dto/applicaiton-contest/create-ap
 import { AuthorizedRequest } from '../auth/type/authorized-request';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { MemberTeamGuard } from '../team/guards/member-team.guard';
+import { ApplicationContestService } from './services/application-contest.service';
 
 @ApiTags('ContestController')
 @Controller('contests')
 export class ContestController {
   private readonly logger = new Logger(ContestController.name);
 
-  constructor(private readonly contestService: ContestService) {}
+  constructor(
+    private readonly contestService: ContestService,
+    private readonly applicationContestService: ApplicationContestService,
+  ) {}
 
- 
   @ApiOperation({
     summary: 'получение списка конкурсов',
     description: 'список формируется в порядке убывания даты начала конкурса',
@@ -51,11 +54,10 @@ export class ContestController {
     }
   }
 
-  
   @ApiOperation({
     summary: 'создание заявки на участие в конкурсе',
   })
-  @ApiResponse({ status: HttpStatus.OK, type: ApplicationContestDto})
+  @ApiResponse({ status: HttpStatus.OK, type: ApplicationContestDto })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'появляется при ошибках валидации полей',
@@ -64,12 +66,16 @@ export class ContestController {
   @UseGuards(JwtAuthGuard, MemberTeamGuard)
   @Post('/:contestId/actions/applications/teams/:teamId')
   async createApplicationContest(
-    @Param("contestId", ParseIntPipe) contestId: number,
-    @Param("teamId", ParseIntPipe) teamId:number,
-    @Body() createApplicationContestDto: CreateApplicationContestDto
+    @Param('contestId', ParseIntPipe) contestId: number,
+    @Param('teamId', ParseIntPipe) teamId: number,
+    @Body() createApplicationContestDto: CreateApplicationContestDto,
   ): Promise<ApplicationContestDto> {
     try {
-      return await this.contestService.createApplicationContest(contestId,teamId, createApplicationContestDto)
+      return await this.applicationContestService.createApplicationContest(
+        contestId,
+        teamId,
+        createApplicationContestDto,
+      );
     } catch (error) {
       throw createException(error, this.logger);
     }

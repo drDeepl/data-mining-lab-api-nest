@@ -34,7 +34,7 @@ export class SocketIOAdapter extends IoAdapter {
     const authService = this.app.get(AuthService);
     const server: Server = super.createIOServer(port, optionsWithCORS);
     server
-      .of('contests')
+      .of('contests/applications')
       .use(createTokenMidleware(jwtService, this.logger, authService));
     return server;
   }

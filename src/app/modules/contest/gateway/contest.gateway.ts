@@ -5,10 +5,11 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Namespace } from 'socket.io';
+import { Namespace, Socket } from 'socket.io';
 import * as config from 'dotenv';
-import { Logger } from '@nestjs/common';
+import { Logger, NotImplementedException } from '@nestjs/common';
 import { SocketWithAuth } from '../midlewares/types';
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
 const wss_settings = {
   port: parseInt(process.env.WS_PORT),
@@ -17,7 +18,7 @@ const wss_settings = {
 };
 
 @WebSocketGateway(wss_settings.port, {
-  namespace: 'contests',
+  namespace: 'contests/applications',
   pingInterval: wss_settings.ping_interval,
   pingTimeout: wss_settings.ping_timeout,
 })
@@ -52,5 +53,24 @@ export class ContestGateway
       `Websocket Client with: id ${client.id}, userId ${client.userId} and role ${client.role} disconnected`,
     );
     this.logger.debug(`Number of connected sockets: ${sockets.size}`);
+  }
+
+  async sendApplicationsByUsersId(usersId: number[]) {
+    throw new NotImplementedException('TODO: ADD ApplicationContests');
+    usersId.push(2);
+    console.log(usersId);
+    this.logger.debug('sendApplicationsByUsersId');
+    console.log(`sockets count: ${this.io.sockets.size}`);
+    usersId.forEach((userId: number) => {
+      this.io.sockets.forEach((socket: SocketWithAuth) => {
+        if (userId === Number(socket.userId)) {
+          socket.emit('updated-applications', 'message');
+        }
+      });
+    });
+  }
+
+  async getSockets() {
+    return this.io.sockets;
   }
 }
